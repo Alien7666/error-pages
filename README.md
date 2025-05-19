@@ -44,15 +44,15 @@ npm start
 node server.js
 ```
 
-伺服器將在 `http://localhost:3002` 上啟動，您可以通過以下路徑訪問錯誤頁面：
+伺服器將在 `http://localhost:3000` 上啟動，您可以通過以下路徑訪問錯誤頁面：
 
-- 400 錯誤: http://localhost:3002/test-error/400
-- 401 錯誤: http://localhost:3002/test-error/401
-- 403 錯誤: http://localhost:3002/test-error/403
-- 404 錯誤: http://localhost:3002/test-error/404
-- 500 錯誤: http://localhost:3002/test-error/500
-- 502 錯誤: http://localhost:3002/test-error/502
-- 503 錯誤: http://localhost:3002/test-error/503
+- 400 錯誤: http://localhost:3000/test-error/400
+- 401 錯誤: http://localhost:3000/test-error/401
+- 403 錯誤: http://localhost:3000/test-error/403
+- 404 錯誤: http://localhost:3000/test-error/404
+- 500 錯誤: http://localhost:3000/test-error/500
+- 502 錯誤: http://localhost:3000/test-error/502
+- 503 錯誤: http://localhost:3000/test-error/503
 
 ### 直接使用靜態文件
 
