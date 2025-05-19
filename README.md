@@ -2,7 +2,7 @@
 
 作者: Alien
 日期: 2025-05-19
-電郵: alien@alien.com.tw
+電郵: alien@azndev.com
 
 版權聲明: 本專案及其內容遵循 [MIT 授權條款](https://opensource.org/licenses/MIT)。您可以自由使用、修改和分發本專案的代碼和資源，但請保留原作者信息和版權聲明。
 
@@ -68,4 +68,4 @@ node server.js
 
 ## 聯繫方式
 
-如有任何問題或建議，請通過 alien@alien.com.tw 與我聯繫。
+如有任何問題或建議，請通過 alien@azndev.com 與我聯繫。
