@@ -1,7 +1,7 @@
 {
-  "name": "not-found-page-nodejs",
+  "name": "error-pages-nodejs",
   "version": "1.0.0",
-  "description": "A beautiful 404 page with Node.js and Express",
+  "description": "美觀的HTTP錯誤頁面，使用Node.js提供服務",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,13 +9,13 @@
   },
   "keywords": [
     "404",
-    "not-found",
+    "error-pages",
     "nodejs",
-    "express"
+    "http-status"
   ],
-  "author": "Cascade AI",
+  "author": "Alien",
   "license": "ISC",
-  "dependencies": {
-    "express": "^4.19.2"
+  "engines": {
+    "node": ">=12.0.0"
   }
 }
