@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>401 - 未授權</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 基本樣式 */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #ee5253 0%, #d92027 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .container {
+            position: relative;
+            max-width: 800px;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+        
+        .error-code {
+            font-size: 10rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .message h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #fff;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .message p {
+            font-size: 1.1rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .home-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #ff6b6b;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            position: relative;
+            z-index: 2;
+            border: none;
+        }
+        
+        .home-button:hover {
+            background-color: #ff5252;
+            transform: translateY(-3px);
+        }
+        
+        .lock-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            opacity: 0.1;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .lock {
+            font-size: 15rem;
+            color: white;
+        }
+        
+        .security-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .security-line {
+            position: absolute;
+            height: 2px;
+            background-color: rgba(255, 255, 255, 0.2);
+            animation: scan linear infinite;
+        }
+        
+        @keyframes scan {
+            0% {
+                transform: translateY(-100%);
+            }
+            100% {
+                transform: translateY(100vh);
+            }
+        }
+        
+        .key-icon {
+            display: inline-block;
+            margin-right: 5px;
+            animation: wiggle 1s ease-in-out infinite alternate;
+        }
+        
+        @keyframes wiggle {
+            0% { transform: rotate(-10deg); }
+            100% { transform: rotate(10deg); }
+        }
+        
+        /* 響應式設計調整 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+            .error-code {
+                font-size: 8rem;
+            }
+            .message h1 {
+                font-size: 2rem;
+            }
+            .message p {
+                font-size: 1rem;
+            }
+            .lock {
+                font-size: 10rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            .message h1 {
+                font-size: 1.5rem;
+            }
+            .message p {
+                font-size: 0.9rem;
+            }
+            .home-button {
+                padding: 10px 20px;
+            }
+            .lock {
+                font-size: 8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="security-lines" id="securityLines"></div>
+    
+    <div class="container">
+        <div class="lock-container">
+            <div class="lock">🔒</div>
+        </div>
+        
+        <div class="error-code">401</div>
+        <div class="message">
+            <h1><span class="key-icon">🔑</span>未授權訪問</h1>
+            <p>您需要提供有效的身份驗證憑據才能訪問此資源。請登入或聯繫管理員獲取訪問權限。</p>
+            <a href="#" id="backButton" class="home-button">返回上一頁</a>
+        </div>
+    </div>
+    
+    <script>
+        // 動態處理返回 URL
+        document.addEventListener('DOMContentLoaded', () => {
+            // 設置返回按鈕
+            const backButton = document.getElementById('backButton');
+            if (backButton) {
+                // 檢查是否有上一頁
+                if (document.referrer) {
+                    backButton.href = document.referrer;
+                    backButton.textContent = '返回上一頁';
+                } else {
+                    // 如果沒有上一頁，則返回到根目錄
+                    backButton.href = '/';
+                    backButton.textContent = '返回首頁';
+                }
+                
+                // 添加倒數計時
+                let seconds = 10;
+                const updateCountdown = () => {
+                    const originalText = backButton.textContent.split(' (')[0];
+                    backButton.textContent = `${originalText} (${seconds})`;
+                    if (seconds <= 0) {
+                        window.location.href = backButton.href;
+                    } else {
+                        seconds--;
+                        setTimeout(updateCountdown, 1000);
+                    }
+                };
+                setTimeout(updateCountdown, 1000);
+            }
+            
+            // 創建安全掃描線
+            createSecurityLines();
+        });
+        
+        // 創建安全掃描線
+        function createSecurityLines() {
+            const container = document.getElementById('securityLines');
+            const lineCount = 5;
+            
+            for (let i = 0; i < lineCount; i++) {
+                const line = document.createElement('div');
+                line.className = 'security-line';
+                
+                // 設置線條樣式
+                const width = Math.random() * 50 + 50; // 50-100% 寬度
+                const duration = Math.random() * 5 + 3; // 3-8秒
+                const delay = Math.random() * 2;
+                
+                line.style.width = `${width}%`;
+                line.style.left = `${(100 - width) / 2}%`;
+                line.style.animation = `scan ${duration}s linear infinite`;
+                line.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(line);
+            }
+        }
+    </script>
+</body>
+</html>

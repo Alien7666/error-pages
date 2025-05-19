@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 - 禁止訪問</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 基本樣式 */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .container {
+            position: relative;
+            max-width: 800px;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+        
+        .error-code {
+            font-size: 10rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .message h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #fff;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .message p {
+            font-size: 1.1rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .home-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #ff9f43;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 159, 67, 0.4);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .home-button:hover {
+            background-color: #ff7f00;
+            transform: translateY(-3px);
+        }
+        
+        .barrier {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.1;
+        }
+        
+        .barrier-stripe {
+            position: absolute;
+            width: 200%;
+            height: 30px;
+            background: repeating-linear-gradient(
+                45deg,
+                #000,
+                #000 20px,
+                #ff0 20px,
+                #ff0 40px
+            );
+            transform: rotate(-5deg);
+        }
+        
+        .stop-sign {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 4rem;
+            animation: pulse 2s infinite alternate;
+            z-index: 3;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+        
+        .police-lights {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .police-light {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+        
+        .red-light {
+            background: radial-gradient(circle at 20% 20%, rgba(255, 0, 0, 0.8) 0%, rgba(255, 0, 0, 0) 60%);
+            animation: flash-red 3s infinite;
+        }
+        
+        .blue-light {
+            background: radial-gradient(circle at 80% 20%, rgba(0, 0, 255, 0.8) 0%, rgba(0, 0, 255, 0) 60%);
+            animation: flash-blue 3s infinite;
+        }
+        
+        @keyframes flash-red {
+            0%, 100% { opacity: 0; }
+            25%, 30% { opacity: 0.3; }
+        }
+        
+        @keyframes flash-blue {
+            0%, 100% { opacity: 0; }
+            75%, 80% { opacity: 0.3; }
+        }
+        
+        /* 響應式設計調整 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+            .error-code {
+                font-size: 8rem;
+            }
+            .message h1 {
+                font-size: 2rem;
+            }
+            .message p {
+                font-size: 1rem;
+            }
+            .stop-sign {
+                font-size: 3rem;
+                top: 15px;
+                right: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            .message h1 {
+                font-size: 1.5rem;
+            }
+            .message p {
+                font-size: 0.9rem;
+            }
+            .home-button {
+                padding: 10px 20px;
+            }
+            .stop-sign {
+                font-size: 2rem;
+                top: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="police-lights">
+        <div class="police-light red-light"></div>
+        <div class="police-light blue-light"></div>
+    </div>
+    
+    <div class="container">
+        <div class="stop-sign">🚫</div>
+        
+        <div class="barrier" id="barrier"></div>
+        
+        <div class="error-code">403</div>
+        <div class="message">
+            <h1>禁止訪問</h1>
+            <p>您沒有權限訪問此資源。請確認您的訪問權限或聯繫網站管理員。</p>
+            <a href="#" id="backButton" class="home-button">返回上一頁</a>
+        </div>
+    </div>
+    
+    <script>
+        // 動態處理返回 URL
+        document.addEventListener('DOMContentLoaded', () => {
+            // 設置返回按鈕
+            const backButton = document.getElementById('backButton');
+            if (backButton) {
+                // 檢查是否有上一頁
+                if (document.referrer) {
+                    backButton.href = document.referrer;
+                    backButton.textContent = '返回上一頁';
+                } else {
+                    // 如果沒有上一頁，則返回到根目錄
+                    backButton.href = '/';
+                    backButton.textContent = '返回首頁';
+                }
+                
+                // 添加倒數計時
+                let seconds = 10;
+                const updateCountdown = () => {
+                    const originalText = backButton.textContent.split(' (')[0];
+                    backButton.textContent = `${originalText} (${seconds})`;
+                    if (seconds <= 0) {
+                        window.location.href = backButton.href;
+                    } else {
+                        seconds--;
+                        setTimeout(updateCountdown, 1000);
+                    }
+                };
+                setTimeout(updateCountdown, 1000);
+            }
+            
+            // 創建警戒條紋
+            createBarrierStripes();
+        });
+        
+        // 創建警戒條紋
+        function createBarrierStripes() {
+            const barrier = document.getElementById('barrier');
+            const stripeCount = 7;
+            
+            for (let i = 0; i < stripeCount; i++) {
+                const stripe = document.createElement('div');
+                stripe.className = 'barrier-stripe';
+                
+                // 計算位置
+                const top = (i * 100) / stripeCount;
+                
+                stripe.style.top = `${top}%`;
+                stripe.style.left = `-50%`;
+                
+                barrier.appendChild(stripe);
+            }
+        }
+    </script>
+</body>
+</html>

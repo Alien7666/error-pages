@@ -1,0 +1,21 @@
+{
+  "name": "not-found-page-nodejs",
+  "version": "1.0.0",
+  "description": "A beautiful 404 page with Node.js and Express",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "404",
+    "not-found",
+    "nodejs",
+    "express"
+  ],
+  "author": "Cascade AI",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

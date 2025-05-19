@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - 伺服器錯誤</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 基本樣式 */
+        body {
+            font-family: 'Ubuntu Mono', monospace;
+            background: #000;
+            color: #00ff00;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .container {
+            position: relative;
+            max-width: 800px;
+            padding: 40px;
+            background: rgba(0, 20, 0, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            border: 1px solid #00ff00;
+            overflow: hidden;
+        }
+        
+        .error-code {
+            font-size: 10rem;
+            font-weight: 700;
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
+            margin-bottom: -20px;
+            position: relative;
+        }
+        
+        .message h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #00ff00;
+            text-transform: uppercase;
+        }
+        
+        .message p {
+            font-size: 1.1rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: #00cc00;
+        }
+        
+        .home-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #003300;
+            color: #00ff00;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+            border: 1px solid #00ff00;
+        }
+        
+        .home-button:hover {
+            background-color: #004400;
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        }
+        
+        .terminal-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.2;
+        }
+        
+        .terminal-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #00ff00;
+            margin-left: 5px;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+        
+        .error-logs {
+            font-family: 'Ubuntu Mono', monospace;
+            background: rgba(0, 0, 0, 0.7);
+            color: #ff3333;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            border: 1px solid #ff0000;
+            text-align: left;
+            height: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .log-line {
+            margin: 0;
+            padding: 2px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: type 3s steps(60, end);
+        }
+        
+        @keyframes type {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        .binary-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+        
+        .binary-column {
+            position: absolute;
+            top: -20px;
+            font-family: 'Ubuntu Mono', monospace;
+            color: #00ff00;
+            font-size: 1.2rem;
+            opacity: 0.3;
+            text-shadow: 0 0 5px #00ff00;
+            animation: rain linear infinite;
+        }
+        
+        @keyframes rain {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+        
+        /* 響應式設計調整 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+            .error-code {
+                font-size: 8rem;
+            }
+            .message h1 {
+                font-size: 2rem;
+            }
+            .message p {
+                font-size: 1rem;
+            }
+            .error-logs {
+                height: 80px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            .message h1 {
+                font-size: 1.5rem;
+            }
+            .message p {
+                font-size: 0.9rem;
+            }
+            .home-button {
+                padding: 10px 20px;
+            }
+            .error-logs {
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-effect"></div>
+    <div class="binary-rain" id="binaryRain"></div>
+    
+    <div class="container">
+        <div class="error-code">500</div>
+        <div class="message">
+            <h1>伺服器內部錯誤 <span class="terminal-cursor"></span></h1>
+            <p>系統遇到了無法恢復的錯誤。我們的技術團隊已經收到通知，正在努力修復問題。</p>
+            
+            <div class="error-logs" id="errorLogs">
+                <!-- 錯誤日誌將由 JavaScript 動態生成 -->
+            </div>
+            
+            <a href="#" id="backButton" class="home-button">返回上一頁</a>
+        </div>
+    </div>
+    
+    <script>
+        // 動態處理返回 URL
+        document.addEventListener('DOMContentLoaded', () => {
+            // 設置返回按鈕
+            const backButton = document.getElementById('backButton');
+            if (backButton) {
+                // 檢查是否有上一頁
+                if (document.referrer) {
+                    backButton.href = document.referrer;
+                    backButton.textContent = '返回上一頁';
+                } else {
+                    // 如果沒有上一頁，則返回到根目錄
+                    backButton.href = '/';
+                    backButton.textContent = '返回首頁';
+                }
+                
+                // 添加倒數計時
+                let seconds = 10;
+                const updateCountdown = () => {
+                    const originalText = backButton.textContent.split(' (')[0];
+                    backButton.textContent = `${originalText} (${seconds})`;
+                    if (seconds <= 0) {
+                        window.location.href = backButton.href;
+                    } else {
+                        seconds--;
+                        setTimeout(updateCountdown, 1000);
+                    }
+                };
+                setTimeout(updateCountdown, 1000);
+            }
+            
+            // 創建錯誤日誌
+            createErrorLogs();
+            
+            // 創建二進制雨效果
+            createBinaryRain();
+        });
+        
+        // 創建錯誤日誌
+        function createErrorLogs() {
+            const errorLogs = document.getElementById('errorLogs');
+            const errorMessages = [
+                "ERROR [500] - Uncaught exception at /system/core/handler.js:142",
+                "FATAL - Memory allocation failed at 0x8F7A2C3D",
+                "WARN - Database connection timeout after 30000ms",
+                "ERROR - Failed to process request: Maximum call stack size exceeded",
+                "CRITICAL - System service 'api-gateway' is not responding"
+            ];
+            
+            errorMessages.forEach((message, index) => {
+                setTimeout(() => {
+                    const logLine = document.createElement('p');
+                    logLine.className = 'log-line';
+                    logLine.textContent = message;
+                    errorLogs.appendChild(logLine);
+                    
+                    // 自動滾動到底部
+                    errorLogs.scrollTop = errorLogs.scrollHeight;
+                }, index * 1000);
+            });
+        }
+        
+        // 創建二進制雨效果
+        function createBinaryRain() {
+            const container = document.getElementById('binaryRain');
+            const columnCount = Math.floor(window.innerWidth / 20);
+            
+            for (let i = 0; i < columnCount; i++) {
+                const column = document.createElement('div');
+                column.className = 'binary-column';
+                
+                // 生成隨機二進制字符
+                const length = Math.floor(Math.random() * 20) + 10;
+                let content = '';
+                for (let j = 0; j < length; j++) {
+                    content += Math.random() > 0.5 ? '1' : '0';
+                    content += '<br>';
+                }
+                column.innerHTML = content;
+                
+                // 設置位置和動畫
+                const left = (i * 100) / columnCount;
+                const speed = Math.random() * 10 + 5;
+                const delay = Math.random() * 10;
+                
+                column.style.left = `${left}%`;
+                column.style.animation = `rain ${speed}s linear infinite`;
+                column.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(column);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>錯誤頁面示範</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .error-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .error-link {
+            display: inline-block;
+            padding: 12px;
+            background-color: #6c5ce7;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .error-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+        .error-400 { background-color: #ff9f43; }
+        .error-401 { background-color: #ee5253; }
+        .error-403 { background-color: #ff6b6b; }
+        .error-404 { background-color: #5f27cd; }
+        .error-500 { background-color: #ff6348; }
+        .error-502 { background-color: #2e86de; }
+        .error-503 { background-color: #10ac84; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>錯誤頁面示範</h1>
+        <p>這是一個展示不同HTTP錯誤代碼頁面的示範網站。每個錯誤頁面都有獨特的設計和風格。</p>
+        <p>點擊下方連結查看不同的錯誤頁面：</p>
+        
+        <div class="error-links">
+            <a href="/test-error/400" class="error-link error-400">400 錯誤請求</a>
+            <a href="/test-error/401" class="error-link error-401">401 未授權</a>
+            <a href="/test-error/403" class="error-link error-403">403 禁止訪問</a>
+            <a href="/test-error/404" class="error-link error-404">404 找不到頁面</a>
+            <a href="/test-error/500" class="error-link error-500">500 伺服器錯誤</a>
+            <a href="/test-error/502" class="error-link error-502">502 閘道錯誤</a>
+            <a href="/test-error/503" class="error-link error-503">503 服務不可用</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>502 - 閘道錯誤</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 基本樣式 */
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #2e86de 0%, #0abde3 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .container {
+            position: relative;
+            max-width: 800px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+        
+        .error-code {
+            font-size: 10rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0,0,0,0.2);
+            margin-bottom: -20px;
+            opacity: 0.9;
+        }
+        
+        .message h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .message p {
+            font-size: 1.1rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .home-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #54a0ff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(84, 160, 255, 0.4);
+            border: 1px solid white;
+        }
+        
+        .home-button:hover {
+            background-color: #2e86de;
+            transform: translateY(-3px);
+        }
+        
+        .network-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        .node {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: white;
+        }
+        
+        .connection {
+            position: absolute;
+            height: 2px;
+            background-color: white;
+            transform-origin: left center;
+        }
+        
+        .broken-connection {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            font-size: 2rem;
+            animation: flash 1s infinite alternate;
+            z-index: 3;
+        }
+        
+        @keyframes flash {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.1); }
+        }
+        
+        .cloud {
+            position: absolute;
+            font-size: 5rem;
+            opacity: 0.2;
+            filter: blur(1px);
+            animation: float 10s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .loading-dots {
+            display: inline-block;
+        }
+        
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: white;
+            margin: 0 3px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .dot:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+        
+        .dot:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+        }
+        
+        /* 響應式設計調整 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+            .error-code {
+                font-size: 8rem;
+            }
+            .message h1 {
+                font-size: 2rem;
+            }
+            .message p {
+                font-size: 1rem;
+            }
+            .cloud {
+                font-size: 4rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            .message h1 {
+                font-size: 1.5rem;
+            }
+            .message p {
+                font-size: 0.9rem;
+            }
+            .home-button {
+                padding: 10px 20px;
+            }
+            .cloud {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="network-container" id="networkContainer"></div>
+    
+    <div class="container">
+        <div class="error-code">502</div>
+        <div class="message">
+            <h1>閘道錯誤</h1>
+            <p>伺服器作為閘道或代理，從上游伺服器收到無效響應。我們正在嘗試重新連接中
+                <span class="loading-dots">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </span>
+            </p>
+            <a href="#" id="backButton" class="home-button">返回上一頁</a>
+        </div>
+    </div>
+    
+    <script>
+        // 動態處理返回 URL
+        document.addEventListener('DOMContentLoaded', () => {
+            // 設置返回按鈕
+            const backButton = document.getElementById('backButton');
+            if (backButton) {
+                // 檢查是否有上一頁
+                if (document.referrer) {
+                    backButton.href = document.referrer;
+                    backButton.textContent = '返回上一頁';
+                } else {
+                    // 如果沒有上一頁，則返回到根目錄
+                    backButton.href = '/';
+                    backButton.textContent = '返回首頁';
+                }
+                
+                // 添加倒數計時
+                let seconds = 10;
+                const updateCountdown = () => {
+                    const originalText = backButton.textContent.split(' (')[0];
+                    backButton.textContent = `${originalText} (${seconds})`;
+                    if (seconds <= 0) {
+                        window.location.href = backButton.href;
+                    } else {
+                        seconds--;
+                        setTimeout(updateCountdown, 1000);
+                    }
+                };
+                setTimeout(updateCountdown, 1000);
+            }
+            
+            // 創建網絡連接視覺效果
+            createNetworkVisualization();
+            
+            // 添加雲朵
+            addClouds();
+        });
+        
+        // 創建網絡連接視覺效果
+        function createNetworkVisualization() {
+            const container = document.getElementById('networkContainer');
+            const nodeCount = 8;
+            const nodes = [];
+            
+            // 創建節點
+            for (let i = 0; i < nodeCount; i++) {
+                const node = document.createElement('div');
+                node.className = 'node';
+                
+                // 隨機位置
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                node.style.left = `${x}%`;
+                node.style.top = `${y}%`;
+                
+                container.appendChild(node);
+                nodes.push({ element: node, x, y });
+            }
+            
+            // 創建連接
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    // 只連接一些節點，不是全部
+                    if (Math.random() > 0.6) continue;
+                    
+                    const connection = document.createElement('div');
+                    connection.className = 'connection';
+                    
+                    const node1 = nodes[i];
+                    const node2 = nodes[j];
+                    
+                    // 計算連接的位置和角度
+                    const x1 = node1.x;
+                    const y1 = node1.y;
+                    const x2 = node2.x;
+                    const y2 = node2.y;
+                    
+                    const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                    const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                    
+                    connection.style.width = `${length}%`;
+                    connection.style.left = `${x1}%`;
+                    connection.style.top = `${y1}%`;
+                    connection.style.transform = `rotate(${angle}deg)`;
+                    
+                    container.appendChild(connection);
+                    
+                    // 有時添加一個斷開的連接標誌
+                    if (Math.random() > 0.7) {
+                        const brokenConnection = document.createElement('div');
+                        brokenConnection.className = 'broken-connection';
+                        brokenConnection.innerHTML = '⚡';
+                        
+                        // 放在連接的中間
+                        brokenConnection.style.left = `${(x1 + x2) / 2}%`;
+                        brokenConnection.style.top = `${(y1 + y2) / 2}%`;
+                        
+                        container.appendChild(brokenConnection);
+                    }
+                }
+            }
+        }
+        
+        // 添加雲朵
+        function addClouds() {
+            const container = document.body;
+            const cloudCount = 3;
+            
+            for (let i = 0; i < cloudCount; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud';
+                cloud.innerHTML = '☁️';
+                
+                // 隨機位置
+                const x = Math.random() * 80 + 10;
+                const y = Math.random() * 80 + 10;
+                
+                cloud.style.left = `${x}%`;
+                cloud.style.top = `${y}%`;
+                cloud.style.animationDelay = `${i * 2}s`;
+                
+                container.appendChild(cloud);
+            }
+        }
+    </script>
+</body>
+</html>

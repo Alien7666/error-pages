@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>503 - 服務不可用</title>
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+    <style>
+        /* 基本樣式 */
+        body {
+            font-family: 'Varela Round', sans-serif;
+            background: linear-gradient(135deg, #10ac84 0%, #1dd1a1 100%);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .container {
+            position: relative;
+            max-width: 800px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+        
+        .error-code {
+            font-size: 10rem;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0,0,0,0.2);
+            margin-bottom: -20px;
+            opacity: 0.9;
+        }
+        
+        .message h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .message p {
+            font-size: 1.1rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .home-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #1abc9c;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(26, 188, 156, 0.4);
+            border: 1px solid white;
+        }
+        
+        .home-button:hover {
+            background-color: #16a085;
+            transform: translateY(-3px);
+        }
+        
+        .maintenance {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 4rem;
+            animation: rotate 10s linear infinite;
+            z-index: 3;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #1abc9c;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s;
+            position: relative;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            animation: shine 1.5s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .eta {
+            font-size: 0.9rem;
+            margin-top: -10px;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .tools {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+        
+        .tool {
+            position: absolute;
+            font-size: 2rem;
+            animation: float-tool 15s ease-in-out infinite;
+        }
+        
+        @keyframes float-tool {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-20px) rotate(90deg);
+            }
+            50% {
+                transform: translateY(0) rotate(180deg);
+            }
+            75% {
+                transform: translateY(20px) rotate(270deg);
+            }
+        }
+        
+        /* 響應式設計調整 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+            .error-code {
+                font-size: 8rem;
+            }
+            .message h1 {
+                font-size: 2rem;
+            }
+            .message p {
+                font-size: 1rem;
+            }
+            .maintenance {
+                font-size: 3rem;
+                top: 15px;
+                right: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            .message h1 {
+                font-size: 1.5rem;
+            }
+            .message p {
+                font-size: 0.9rem;
+            }
+            .home-button {
+                padding: 10px 20px;
+            }
+            .maintenance {
+                font-size: 2rem;
+                top: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="tools" id="tools"></div>
+    
+    <div class="container">
+        <div class="maintenance">🔧</div>
+        
+        <div class="error-code">503</div>
+        <div class="message">
+            <h1>服務暫時不可用</h1>
+            <p>我們正在進行系統維護，服務暫時不可用。請稍後再試。</p>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="eta" id="eta">預計完成時間：計算中...</div>
+            
+            <a href="#" id="backButton" class="home-button">返回上一頁</a>
+        </div>
+    </div>
+    
+    <script>
+        // 動態處理返回 URL
+        document.addEventListener('DOMContentLoaded', () => {
+            // 設置返回按鈕
+            const backButton = document.getElementById('backButton');
+            if (backButton) {
+                // 檢查是否有上一頁
+                if (document.referrer) {
+                    backButton.href = document.referrer;
+                    backButton.textContent = '返回上一頁';
+                } else {
+                    // 如果沒有上一頁，則返回到根目錄
+                    backButton.href = '/';
+                    backButton.textContent = '返回首頁';
+                }
+                
+                // 添加倒數計時
+                let seconds = 10;
+                const updateCountdown = () => {
+                    const originalText = backButton.textContent.split(' (')[0];
+                    backButton.textContent = `${originalText} (${seconds})`;
+                    if (seconds <= 0) {
+                        window.location.href = backButton.href;
+                    } else {
+                        seconds--;
+                        setTimeout(updateCountdown, 1000);
+                    }
+                };
+                setTimeout(updateCountdown, 1000);
+            }
+            
+            // 更新進度條
+            updateProgressBar();
+            
+            // 添加工具圖示
+            addTools();
+        });
+        
+        // 更新進度條
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progressBar');
+            const eta = document.getElementById('eta');
+            let progress = 0;
+            
+            // 生成一個隨機的完成時間（10-30分鐘）
+            const completionMinutes = Math.floor(Math.random() * 20) + 10;
+            const now = new Date();
+            const completionTime = new Date(now.getTime() + completionMinutes * 60000);
+            const formattedTime = completionTime.getHours().toString().padStart(2, '0') + ':' + 
+                                 completionTime.getMinutes().toString().padStart(2, '0');
+            
+            eta.textContent = `預計完成時間：${formattedTime}`;
+            
+            // 每 300ms 更新進度條
+            const interval = setInterval(() => {
+                // 進度增加速度隨機，但總體趨勢是變慢
+                const increment = (Math.random() * 0.5) * (1 - progress / 100);
+                progress += increment;
+                
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                }
+                
+                progressBar.style.width = `${progress}%`;
+            }, 300);
+        }
+        
+        // 添加工具圖示
+        function addTools() {
+            const container = document.getElementById('tools');
+            const toolEmojis = ['🔧', '🔨', '⚙️', '🛠️', '🔩', '🧰', '🪛', '🪚', '⛏️', '🔌'];
+            const toolCount = 15;
+            
+            for (let i = 0; i < toolCount; i++) {
+                const tool = document.createElement('div');
+                tool.className = 'tool';
+                
+                // 隨機選擇一個工具表情符號
+                const randomEmoji = toolEmojis[Math.floor(Math.random() * toolEmojis.length)];
+                tool.innerHTML = randomEmoji;
+                
+                // 隨機位置
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                tool.style.left = `${x}%`;
+                tool.style.top = `${y}%`;
+                tool.style.animationDelay = `${i * 0.5}s`;
+                
+                container.appendChild(tool);
+            }
+        }
+    </script>
+</body>
+</html>
